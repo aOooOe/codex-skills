@@ -1,0 +1,32 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {createRequire} from 'node:module';
+import assert from 'node:assert/strict';
+const require=createRequire(import.meta.url);
+const {chromium}=require(process.env.PLAYWRIGHT_PACKAGE||'playwright');
+const file=path.resolve(process.argv[2]),out=path.resolve(process.argv[3]||path.dirname(file));
+await fs.mkdir(out,{recursive:true});
+const browser=await chromium.launch({channel:'msedge',headless:true});
+try{
+ const context=await browser.newContext({viewport:{width:1440,height:1080},acceptDownloads:true});
+ const page=await context.newPage(),errors=[],requests=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(/^https?:/.test(r.url()))requests.push(r.url());});
+ await page.goto(pathToFileURL(file).href);await page.getByRole('heading',{name:'先选朋友，再一起看战绩'}).waitFor();
+ await page.locator('[data-friend]').nth(0).check();await page.locator('[data-friend]').nth(1).check();
+ assert.equal(await page.locator('#selected-count').innerText(),'2 位');assert.equal(await page.locator('.kpi').count(),4);
+ await page.screenshot({path:path.join(out,'overview.png'),fullPage:true});
+ await page.locator('[data-profile]').nth(1).click();assert.equal(await page.locator('#profile-select').count(),1);assert.ok(await page.locator('.advice-card').count()>0);
+ await page.locator('[data-match]').first().click();assert.equal(await page.locator('#match-dialog').evaluate(el=>el.open),true);assert.ok(await page.locator('#match-dialog tbody tr').count()>=10);await page.locator('#close-dialog').click();
+ await page.screenshot({path:path.join(out,'profile.png'),fullPage:true});
+ await page.locator('#from').fill('2026-10-14');await page.locator('#from').dispatchEvent('change');await page.locator('#to').fill('2026-10-17');await page.locator('#to').dispatchEvent('change');
+ await page.locator('[data-view="matches"]').click();assert.ok((await page.locator('#view').innerText()).length>0);
+ await page.locator('#outcome').selectOption('loss');
+ const downloadPromise=page.waitForEvent('download');await page.locator('#export').click();const download=await downloadPromise;const exportPath=path.join(out,'exported.html');await download.saveAs(exportPath);
+ const exported=await context.newPage();exported.on('pageerror',e=>errors.push(e.message));await exported.goto(pathToFileURL(exportPath).href);
+ assert.equal(await exported.locator('#selected-count').innerText(),'2 位');assert.equal(await exported.locator('#from').inputValue(),'2026-10-14');assert.equal(await exported.locator('#outcome').inputValue(),'loss');
+ await page.locator('#reset-date').click();await page.locator('#outcome').selectOption('all');await page.locator('[data-view="method"]').click();assert.ok((await page.locator('#view').innerText()).includes('百分位'));
+ await page.setViewportSize({width:390,height:844});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:path.join(out,'mobile.png'),fullPage:true});
+ const blocked=await browser.newContext();await blocked.addInitScript(()=>Object.defineProperty(window,'localStorage',{get(){throw Error('disabled');}}));const bp=await blocked.newPage();bp.on('pageerror',e=>errors.push(e.message));await bp.goto(pathToFileURL(file).href);await bp.locator('[data-friend]').first().check();assert.ok((await bp.locator('#storage-note').innerText()).includes('未允许'));
+ assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
+ console.log(JSON.stringify({fileProtocol:true,friendSelection:true,details:true,adviceLinks:true,dateFilters:true,exportReopen:true,storageDenied:true,mobileOverflow:false,pageErrors:errors,networkRequests:requests,passed:true},null,2));
+}finally{await browser.close();}

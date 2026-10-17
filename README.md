@@ -7,6 +7,13 @@
 | Skill | 用途 |
 |---|---|
 | [easyeda-datasheet-design](skills/easyeda-datasheet-design/SKILL.md) | 按确切芯片手册学习参考板、设计原理图，并按电流回路审查 PCB；包含连接核对、保存重载回读和验证边界。 |
+| [lol-friends-analyzer](skills/lol-friends-analyzer/SKILL.md) | 读取 Windows 国服 LOL 共同对局，手选朋友和日期，生成离线交互报告、可解释评分与个人复盘建议。 |
+
+## LOL 战绩分析：下载即用
+
+[下载 Windows x64 完整包](https://github.com/aOooOe/codex-skills/releases/download/lol-friends-analyzer-v1.0.0/lol-friends-analyzer-windows-x64.zip) · [使用说明](skills/lol-friends-analyzer/README.md)
+
+完整解压后登录英雄联盟客户端，双击 `Start.cmd` 即可生成报告。包内包含 Node.js 运行时，不需要额外安装 Python、npm 或申请 API Key。双击 `Install-Skill.cmd` 可同时安装为 AI Skill。GitHub 自动生成的源码 ZIP 不含运行时。
 
 ## 使用
 

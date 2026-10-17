@@ -1,0 +1,6 @@
+export const owner={puuid:'self',gameName:'测试本人',tagLine:'100',summonerId:1};
+export const champions=[{id:1,name:'测试法师',roles:['mage']},{id:2,name:'测试坦克',roles:['tank']}];
+export function game(id=1,mode='KIWI'){
+  return {gameId:id,platformId:'TEST',gameMode:mode,mapId:mode==='CLASSIC'?11:12,gameType:'MATCHED_GAME',queueId:mode==='CLASSIC'?420:mode==='ARAM'?450:2400,gameCreation:Date.parse('2026-10-01T00:00:00+08:00')+id*86400000,gameDuration:1200,gameVersion:'26.20.1',participantIdentities:Array.from({length:10},(_,i)=>({participantId:i+1,player:{puuid:i?'friend-'+i:'self',summonerId:i+1,gameName:i?'测试队友'+i:'测试本人',tagLine:String(100+i)}})),participants:Array.from({length:10},(_,i)=>({participantId:i+1,championId:1,teamId:i<5?100:200,stats:{kills:i+id%3+1,deaths:i%4+1,assists:10,goldEarned:8000+i*500,totalDamageDealtToChampions:10000+i*2500+id*100,totalDamageTaken:15000,damageSelfMitigated:10000,totalHeal:500,timeCCingOthers:10+i,visionScore:20,totalMinionsKilled:100,neutralMinionsKilled:0,damageDealtToTurrets:500,item0:1001,playerAugment1:10,win:i<5?id%2===0:id%2!==0,gameEndedInEarlySurrender:false,teamEarlySurrendered:false}}))};
+}
+export const games=(mode='KIWI',count=12)=>Array.from({length:count},(_,i)=>game(i+1,mode));

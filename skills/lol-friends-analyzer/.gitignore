@@ -1,0 +1,7 @@
+/runtime/
+/dist/
+/cache/
+/dataset.json
+/report.html
+*.tmp
+/qa/

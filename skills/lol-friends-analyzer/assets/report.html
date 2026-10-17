@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'"><title>LOL 开黑战绩分析</title><style>/*REPORT_CSS*/</style></head>
+<body>
+<header class="topbar"><a class="brand" href="#overview" aria-label="返回开黑总览"><span class="brand-symbol">L<span>/</span>L</span><span>战友分析 <small>FRIENDS ANALYTICS</small></span></a><div class="top-actions"><span class="offline"><i></i> 离线报告</span><button id="export" class="button">导出当前报告 <span aria-hidden="true">↗</span></button></div></header>
+<main>
+<section class="hero"><div><div class="eyebrow">LEAGUE OF LEGENDS · YOUR TEAM, IN DETAIL</div><h1>每一场并肩，都有迹可循<span>。</span></h1><p id="owner-line"></p></div><div class="hero-note"><span>本工具表现分</span><strong>看数据，也看职责。</strong><small>同模式 · 同英雄定位参照<br>评分与建议均可追溯到对局</small></div></section>
+<section class="coverage" aria-label="采集范围"><div id="coverage"></div><details><summary>数据覆盖与验证状态</summary><div id="coverage-details"></div></details></section>
+<div class="workspace"><aside class="sidebar"><div class="sidebar-title"><h2>选择一起玩的朋友</h2><span id="selected-count" class="pill">0 位</span></div><p class="muted small">从共同队友中手选，统计只包含与你同队的场次。</p><label class="search-label" for="friend-search">搜索昵称或标签</label><input id="friend-search" type="search" placeholder="找到你的开黑搭子…" autocomplete="off"><div class="friend-tools"><button id="clear-friends" class="text-button">清空选择</button><span id="candidate-count" class="muted small"></span></div><div id="friend-list" class="friend-list"></div><p id="storage-note" class="muted small"></p></aside>
+<div class="content"><section class="filters"><label>开始日期<input id="from" type="date"></label><label>结束日期<input id="to" type="date"></label><label>游戏模式<select id="mode"><option value="KIWI">海克斯大乱斗</option><option value="ARAM">普通大乱斗</option><option value="SR">召唤师峡谷</option></select></label><label>对局结果<select id="outcome"><option value="all">全部胜负</option><option value="win">胜局</option><option value="loss">败局</option></select></label><label class="checkbox-label"><input id="exclude-short" type="checkbox">仅正常时长、非提前结束</label><button id="reset-date" class="text-button">全部日期</button></section>
+<p id="filter-error" role="alert" class="error" hidden></p>
+<nav class="tabs" aria-label="报告视图"><button data-view="overview" class="active">开黑总览</button><button data-view="profile">朋友档案</button><button data-view="matches">逐场数据</button><button data-view="method">评分说明</button></nav>
+<div id="view" aria-live="polite"></div></div></div>
+<footer><span>LOL FRIENDS ANALYZER <b>01</b></span><span>本地生成 · 不发送数据 · 表现分不代表完整贡献</span></footer>
+</main>
+<dialog id="match-dialog"><div id="match-content"></div><button id="close-dialog" class="button">关闭详情</button></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<script id="report-data" type="application/json">"REPORT_DATA"</script>
+<script id="saved-state" type="application/json">"REPORT_STATE"</script>
+<script>/*REPORT_CORE*/</script><script>/*REPORT_UI*/</script>
+</body></html>

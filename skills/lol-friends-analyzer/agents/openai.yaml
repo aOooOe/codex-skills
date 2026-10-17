@@ -1,0 +1,4 @@
+interface:
+  display_name: "LOL 开黑战绩分析"
+  short_description: "读取国服客户端共同对局，生成可筛选的朋友战绩、表现评分与复盘建议报告"
+  default_prompt: "使用 $lol-friends-analyzer 分析我和朋友的战绩，生成可自选日期和朋友的本地报告。"
